@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <header>
+        <img src="/images/logo.png" alt="NodeVista Logo" class="logo">
+        <h1>Welcome to NodeVista</h1>
+        <p>Beautiful websites with Node.js & Express</p>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Home Page</h2>
+        <p>Welcome to the homepage! Click the button to learn more about us.</p>
+        
+        <button id="openModalBtn">Learn More</button>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span id="closeBtn" class="close">&times;</span>
+            <h2>About NodeVista</h2>
+            <p>We build modern and interactive websites using Node.js!</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 NodeVista. All Rights Reserved.</p>
+    </footer>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>
