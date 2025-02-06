@@ -19,10 +19,10 @@ Follow these steps to set up the project:
    git clone https://github.com/your-username/NodeVista.git
    cd NodeVista
 Install dependencies
- ** npm install**
+**npm install**
 
 Run the server
-** node server.js **
+**node server.js**
 
 The website will be available at:
 http://localhost:3000
