@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+    environment {
+        AWS_ACCOUNT_ID = "588738609043"  // Change this to your AWS Account ID
+        AWS_REGION = "eu-north-1"  // Ensure this is only the region, not AZ
+        ECR_REPO = "my-app-repo"  // Change to your ECR Repository name
+        IMAGE_TAG = "latest"
+        ECR_REGISTRY = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+    }
+     stage('Verify DockerFile') {
+        steps {
+            script {
+                sh "ls -la"  // Verify presence of Dockerfile
+            }
+        }
+    }
+    
+    stage('Build Docker Image') {
+        steps {
+            script {
+                sh "docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG ."
+            }
+        }
+    }
+    stage('Push Image to ECR') {
+        steps {
+            script {
+                sh """
+                    aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+                """
+                sh "docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG"
+            }
+        }
+    }
+}
