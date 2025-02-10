@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+    environment {
+        AWS_ACCOUNT_ID = "123456789012"
+        AWS_REGION = "us-east-1"
+        ECR_REPO = "my-app-repo"
+        IMAGE_TAG = "latest"
+    }
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git 'https://github.com/your-user/your-repo.git'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh "docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG ."
+                }
+            }
+        }
+        stage('Push Image to ECR') {
+            steps {
+                script {
+                    sh "aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com"
+                    sh "docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG"
+                }
+            }
+        }
+        stage('Deploy to ECS') {
+            steps {
+                script {
+                    sh "aws ecs update-service --cluster my-cluster --service my-service --force-new-deployment"
+                }
+            }
+        }
+    }
+}
